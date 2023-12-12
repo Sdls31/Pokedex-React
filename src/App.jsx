@@ -1,19 +1,22 @@
-import { useState } from 'react'
-import { Pokedex } from './components/Pokedex'
 import { Container } from '@mui/material'
+import { PagesRoutes } from './components/Routes'
+
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
+  <>
+    
     <Container sx={{
       display: 'flex',
       flexDirection: 'column', 
       justifyContent: 'center',
       alignItems: 'center',
+      width: '100%'
     }} >
-      <Pokedex />
+      <PagesRoutes/>
     </Container>
+  </>
   )
 }
 

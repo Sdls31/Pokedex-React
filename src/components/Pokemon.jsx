@@ -3,12 +3,14 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { Box, IconButton, Stack, Typography } from '@mui/material';
+import { Box, Button, IconButton, Modal, Stack, Typography } from '@mui/material';
+import { BasicModal } from './Details';
 
-export const Pokemon = ({pokemon, setBack}) => {
-  const [image, setImage] = useState(pokemon.official_artwork)
-  const [label, setLabel] = useState(false)
+export const Pokemon = ({pokemon, setTeam, team, text}) => {
+  const [image, setImage] = useState(pokemon.official_artwork);
+  const [open, setOpen] = useState(false);
 
+  const handleOpen = () => setOpen(true)
 
   const PokemonTypeColor = {
     'normal': '#A8A77A',
@@ -30,6 +32,25 @@ export const Pokemon = ({pokemon, setBack}) => {
     'steel': '#B7B7CE',
     'fairy': '#D685AD'
   }
+  
+  const PokemonCard = () => {
+    return (
+      <Box style={{backgroundColor: '#CACDCE', padding:25, borderRadius:'5px'}} alignItems="center" justifyContent="center" onClick={handleOpen}>
+        <img width='125px' height='125px' src={image}/>
+        <Typography variant='h6' mt={2} sx={{textAlign:'center'}}>{pokemon.name}</Typography>
+        {pokemon.types.length === 2 ? 
+        <Stack spacing={1} direction="row" alignItems="center" justifyContent="center">
+          <OneLabel type={pokemon.types[0].type.name}/>
+          <OneLabel type={pokemon.types[1].type.name}/>
+        </Stack>
+        :
+        <Stack>
+          <OneLabel type={pokemon.types[0].type.name}/>
+        </Stack>
+      }
+    </Box>
+    )
+  }
 
 
   const OneLabel = ({type}) => {
@@ -42,34 +63,15 @@ export const Pokemon = ({pokemon, setBack}) => {
 
   }
 
-  const handleShinyEvent = () => {
-    if(label){
-      setImage(pokemon.official_artwork_shiny)
-    }else{
-      setImage(pokemon.official_artwork)
-    }
-    setLabel(!label)
-  }
 
   return (
-    <Box style={{backgroundColor: '#CACDCE', padding:25, borderRadius:'5px'}} alignItems="center" justifyContent="center">
-        <Box display='flex' justifyContent='flex-end' alignItems='flex-end'>
-          <IconButton onClick={handleShinyEvent}>
-            <img src='src\assets\estrellas.png'/>
-          </IconButton>
-          </Box>
-        <img width='125px' height='125px' src={image}/>
-        <Typography variant='h6' mt={2} sx={{textAlign:'center'}}>{pokemon.name}</Typography>
-        {pokemon.types.length === 2 ? 
-        <Stack spacing={1} direction="row" alignItems="center" justifyContent="center">
-          <OneLabel type={pokemon.types[0].type.name}/>
-          <OneLabel type={pokemon.types[1].type.name}/>
-        </Stack>
+    <>
+        {  
+        open ? 
+        <BasicModal setOpen={setOpen} open={open} pokemon={pokemon} setTeam={setTeam} team={team} text={text}/>
         :
-        <Stack>
-          <OneLabel type={pokemon.types[0].type.name}/>
-        </Stack>
+        <PokemonCard/>
         }
-    </Box>
+    </>
   )
 }

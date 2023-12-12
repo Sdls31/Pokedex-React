@@ -4,33 +4,19 @@ import { Pokemon } from './Pokemon';
 import { Box,Grid } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase/firebase-config';
+import { doc, getDoc } from 'firebase/firestore';
+import { dbStorage } from '../firebase/firebase-config';
 
 export const Pokedex = () => {
     const [pokemons, setPokemon] = useState([]);
-    const [selectedPokemons, setSelectedPokemons] = useState([]);
     const [page, setPage] = useState(1);
     const [backcolor, setBack] = useState('#ffffff');
-
-   const PokemonTypeColor = {
-    'normal': '#A8A77A',
-    'fire': '#EE8130',
-    'water': '#6390F0',
-    'grass': '#7AC74C',
-    'electric': '#F7D02C',
-    'ice': '#96D9D6',
-    'fighting': '#C22E28',
-    'poison': '#A33EA1',
-    'ground': '#E2BF65',
-    'flying': '#A98FF3',
-    'psychic': '#F95587',
-    'bug': '#A6B91A',
-    'rock': '#B6A136',
-    'ghost': '#735797',
-    'dark': '#705746',
-    'dragon': '#6F35FC',
-    'steel': '#B7B7CE',
-    'fairy': '#D685AD'
-  }
+    const navigate = useNavigate();
+    const [team, setTeam] = useState([]);
+    const [renderedTeam, setRenderedTeam] = useState([])
 
     const url = `https://pokeapi.co/api/v2/pokemon?limit=15&offset=${(page - 1) * 15}`;
 
@@ -49,6 +35,10 @@ export const Pokedex = () => {
                         sprites: pokemon.sprites,
                         official_artwork: pokemon.sprites.other['official-artwork'].front_default,
                         official_artwork_shiny: pokemon.sprites.other['official-artwork'].front_shiny,
+                        stats: pokemon.stats.map((stat) => ({
+                            name: stat.stat.name,
+                            value: stat.base_stat
+                          })),
                     };
                 });
                 setPokemon(pokemonData);
@@ -56,16 +46,42 @@ export const Pokedex = () => {
         });
     }, [setPokemon, page]);
 
+    useEffect(() => {
+        onAuthStateChanged(auth, async (user) => {
+        const docRef = doc(dbStorage , "teams", user.uid);
+        const docSnap = await getDoc(docRef);
+          if (user) {
+            const uid = user.uid;
+            handleTeam(uid, docSnap)
+          } else {
+            console.log('No user')
+          }
+        });
+        }, []);
+  
+      const handleTeam = (uid, docSnap) => {
+  
+        if (docSnap.exists()) {
+            const pokemon = docSnap.data();
+            const arrayPokemon = Object.values(pokemon)
+            console.log('array', arrayPokemon)
+            setTeam((prevTeam) => [...prevTeam, ...arrayPokemon])
+            console.log('team', team)
+        } else {
+          // docSnap.data() will be undefined in this case
+          console.log("Create a Team!");
+        }
+      };
+
 
     return (
-
-
             <Box
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
+                    paddingTop: '3rem'
                 }}
             >
             <div>
@@ -101,7 +117,7 @@ export const Pokedex = () => {
                             alignItems= 'center'
 
                         >
-                            <Pokemon pokemon={pokemon}/>
+                            <Pokemon pokemon={pokemon} setTeam={setTeam} team={team} text='select'/>
                         </Grid>
                     ))}
                 </Grid>
