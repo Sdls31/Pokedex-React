@@ -39,6 +39,7 @@ export const Pokedex = () => {
                             name: stat.stat.name,
                             value: stat.base_stat
                           })),
+                        types: pokemon.types
                     };
                 });
                 setPokemon(pokemonData);
@@ -48,9 +49,9 @@ export const Pokedex = () => {
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
-        const docRef = doc(dbStorage , "teams", user.uid);
-        const docSnap = await getDoc(docRef);
           if (user) {
+            const docRef = doc(dbStorage , "teams", user.uid);
+            const docSnap = await getDoc(docRef);
             const uid = user.uid;
             handleTeam(uid, docSnap)
           } else {
@@ -64,16 +65,15 @@ export const Pokedex = () => {
         if (docSnap.exists()) {
             const pokemon = docSnap.data();
             const arrayPokemon = Object.values(pokemon)
-            console.log('array', arrayPokemon)
-            setTeam((prevTeam) => [...prevTeam, ...arrayPokemon])
-            console.log('team', team)
+            team.push(...arrayPokemon)
         } else {
-          // docSnap.data() will be undefined in this case
-          console.log("Create a Team!");
+            // docSnap.data() will be undefined in this case
+            console.log("Create a Team!");
+            
         }
       };
 
-
+    
     return (
             <Box
                 sx={{
@@ -117,7 +117,7 @@ export const Pokedex = () => {
                             alignItems= 'center'
 
                         >
-                            <Pokemon pokemon={pokemon} setTeam={setTeam} team={team} text='select'/>
+                            <Pokemon key={pokemon.id} pokemon={pokemon} setTeam={setTeam} team={team} text='select'/>
                         </Grid>
                     ))}
                 </Grid>

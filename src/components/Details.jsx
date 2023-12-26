@@ -30,37 +30,49 @@ const style = {
 
 
 
-export const BasicModal = ({setOpen, open, pokemon, setTeam, team, text}) => {
+export const BasicModal = ({setOpen, open, pokemon, setTeam, team, text, onDelete}) => {
   const [image, setImage] = useState(pokemon.official_artwork)
   const [shiny, setShiny] = useState(false)
   const navigate = useNavigate();
 
-
   const handleSetTeam = async (pokemon) => {
-
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const teamRef = doc(dbStorage, 'teams', user.uid); // Reference to the user's document
+        const teamRef = doc(dbStorage, 'teams', user.uid);
         const docSnap = await getDoc(teamRef);
-        if(docSnap.exists()){
-          const pokemonIds = docSnap.data().pokemon;
-          pokemonIds.map((pokemon)=>{
-            setTeam([...team,pokemon])
-          })
-          setTeam([...team, pokemon])
-          await updateDoc(teamRef, {pokemon: arrayUnion(...team)})
-        }else{
-          console.log('Creando equipo para el usuario nuevo');
+        try {
+          const updatedTeam = [];
+  
+          if (docSnap.exists()) {
+            const pokemonIds = docSnap.data().pokemon;
+            if(pokemonIds.includes(pokemon)){
+              console.log('The pokemon alredy in the team')
+            }else{
+              updatedTeam.push(...Object.values(pokemonIds)); // Add existing Pokémon
 
-          await setDoc(teamRef, { pokemon: [] });
-          return [];
+              updatedTeam.push(pokemon); // Add the new Pokémon
+
+              await updateDoc(teamRef, { pokemon: updatedTeam }); // Update Firebase
+            }
+          }else{
+            await setDoc(teamRef, {
+              pokemon: pokemon
+            });
+            console.log("Equipo creado")
+          }
+  
+        } catch (error) {
+          console.error('Error updating team:', error);
         }
+  
       } else {
-        navigate('/login')
+        navigate('/login');
       }
     });
-  }
+  };
   
+
+
   const PokemonTypeColor = {
     'normal': '#A8A77A',
     'fire': '#EE8130',
@@ -138,7 +150,7 @@ export const BasicModal = ({setOpen, open, pokemon, setTeam, team, text}) => {
               </Box>
               <Box display='flex' justifyContent='center' alignItems='center'>
                 <Button variant='contained' sx={{backgroundColor:'#A6CF98'}} 
-                onClick={() => handleSetTeam(pokemon.id)}>{text}</Button>
+                onClick={text === 'select' ? () => handleSetTeam(pokemon.id) : () => onDelete(pokemon.id)}>{text}</Button>
               </Box>
             </Box>
             <Stack spacing={1} sx={{ width: '100%', my: 2 }} direction='column'>

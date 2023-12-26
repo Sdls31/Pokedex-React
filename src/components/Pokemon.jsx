@@ -6,7 +6,7 @@ import '@fontsource/roboto/700.css';
 import { Box, Button, IconButton, Modal, Stack, Typography } from '@mui/material';
 import { BasicModal } from './Details';
 
-export const Pokemon = ({pokemon, setTeam, team, text}) => {
+export const Pokemon = ({pokemon, setTeam, team, text, onDelete}) => {
   const [image, setImage] = useState(pokemon.official_artwork);
   const [open, setOpen] = useState(false);
 
@@ -68,7 +68,7 @@ export const Pokemon = ({pokemon, setTeam, team, text}) => {
     <>
         {  
         open ? 
-        <BasicModal setOpen={setOpen} open={open} pokemon={pokemon} setTeam={setTeam} team={team} text={text}/>
+        <BasicModal setOpen={setOpen} open={open} pokemon={pokemon} setTeam={setTeam} team={team} text={text} onDelete={onDelete}/>
         :
         <PokemonCard/>
         }
