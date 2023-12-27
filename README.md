@@ -1,8 +1,8 @@
-# React + Vite
+# Pokédex React App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This React application utilizes the "pokeapi" API to build an interactive Pokédex. Users can explore detailed information about Pokémon and, additionally, have the ability to create and manage their own Pokémon team. The team information is stored in real-time in a Firebase database.
 
-Currently, two official plugins are available:
+## Project Status
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Currently in development. The initial release includes basic functionalities to explore Pokémon and add them to the team. More features are expected to be added in future versions.
+
