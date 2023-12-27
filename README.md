@@ -5,3 +5,7 @@ This React application utilizes the "pokeapi" API to build an interactive Pokéd
 ## Project Status
 
 Completed. The last release includes functionalities to explore Pokémon and add them to the team, with different users.
+
+## Technologies
+
+React, Google Firebase, API "pokeapi".
