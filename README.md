@@ -4,5 +4,4 @@ This React application utilizes the "pokeapi" API to build an interactive Pokéd
 
 ## Project Status
 
-Currently in development. The initial release includes basic functionalities to explore Pokémon and add them to the team. More features are expected to be added in future versions.
-
+Completed. The last release includes functionalities to explore Pokémon and add them to the team, with different users.
