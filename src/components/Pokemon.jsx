@@ -6,7 +6,7 @@ import '@fontsource/roboto/700.css';
 import { Box, Button, IconButton, Modal, Stack, Typography } from '@mui/material';
 import { BasicModal } from './Details';
 
-export const Pokemon = ({pokemon, setTeam, team, text, onDelete}) => {
+export const Pokemon = ({key, pokemon, setTeam, team, text, onDelete}) => {
   const [image, setImage] = useState(pokemon.official_artwork);
   const [open, setOpen] = useState(false);
 

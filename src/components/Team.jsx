@@ -101,7 +101,7 @@ export const Team = ({}) => {
                             sm={6}
                             md={4}
                             sx={{width: '750px', height: '0' , backgroundColor:{backcolor}}}
-                            key={index}
+                            key={pokemon.id}
                             padding={2}
                             display='flex'
                             justifyContent='center'
@@ -109,7 +109,7 @@ export const Team = ({}) => {
 
                         >
                           
-                            <Pokemon key={index} pokemon={pokemon} setTeam={setTeam} team={team} text='delete' onDelete={handleDeleteTeam}/>
+                            <Pokemon key={pokemon.id} pokemon={pokemon} setTeam={setTeam} team={team} text='delete' onDelete={handleDeleteTeam}/>
                         </Grid>
                     ))}
                 </Grid>
