@@ -8,4 +8,4 @@ Completed. The last release includes functionalities to explore Pokémon and add
 
 ## Technologies
 
-React, Google Firebase, API "pokeapi".
+React, Google Firebase, API "pokeapi", Material-UI.
