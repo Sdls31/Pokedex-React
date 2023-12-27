@@ -31,6 +31,7 @@ export const Pokemon = ({key, pokemon, setTeam, team, text, onDelete}) => {
     'dragon': '#6F35FC',
     'steel': '#B7B7CE',
     'fairy': '#D685AD'
+    
   }
   
   const PokemonCard = () => {
